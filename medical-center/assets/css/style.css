@@ -1,0 +1,50 @@
+/* Personalizzazioni per la grafica */
+body {
+    background-color: #f4f7fc;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Modifica della navbar */
+nav {
+    background-color: #007bff;
+    padding: 10px 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 15px;
+}
+
+nav a:hover {
+    background-color: #0056b3;
+}
+
+/* Card personalizzata */
+.card {
+    border-radius: 10px;
+}
+
+.card-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Tabelle */
+table th {
+    background-color: #007bff;
+    color: white;
+}
+
+table td {
+    text-align: center;
+}
+
+table .table-bordered {
+    border: 1px solid #ddd;
+}
+
+h1, h2 {
+    color: #333;
+}
