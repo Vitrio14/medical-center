@@ -17,6 +17,7 @@ $sql = "SELECT a.id,
                a.data_appuntamento, 
                a.ora_appuntamento, 
                a.note, 
+               a.stato, 
                CONCAT(p.nome, ' ', p.cognome) AS paziente, 
                CONCAT(m.nome, ' ', m.cognome) AS medico 
         FROM appuntamenti a
@@ -51,6 +52,7 @@ $conn->close();
                     <th>Data</th>
                     <th>Ora</th>
                     <th>Note</th>
+                    <th>Stato</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -64,6 +66,7 @@ $conn->close();
                             <td><?php echo htmlspecialchars($row['data_appuntamento']); ?></td>
                             <td><?php echo htmlspecialchars($row['ora_appuntamento']); ?></td>
                             <td><?php echo htmlspecialchars($row['note']); ?></td>
+                            <td><?php echo htmlspecialchars($row['stato']); ?></td>
                             <td>
                                 <!-- Pulsante per modificare -->
                                 <a href="modifica_appuntamento.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Modifica</a>
@@ -77,7 +80,7 @@ $conn->close();
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center">Nessun appuntamento trovato.</td>
+                        <td colspan="8" class="text-center">Nessun appuntamento trovato.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

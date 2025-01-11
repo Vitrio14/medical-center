@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 11, 2025 alle 02:03
+-- Creato il: Gen 11, 2025 alle 15:01
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -46,7 +46,8 @@ CREATE TABLE `appuntamenti` (
   `data_appuntamento` datetime NOT NULL,
   `note` text DEFAULT NULL,
   `data_creazione` timestamp NOT NULL DEFAULT current_timestamp(),
-  `ora_appuntamento` time NOT NULL
+  `ora_appuntamento` time NOT NULL,
+  `stato` varchar(20) DEFAULT 'Non confermato'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -76,6 +77,7 @@ CREATE TABLE `medici` (
   `nome` varchar(100) NOT NULL,
   `cognome` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `specializzazione` varchar(255) DEFAULT NULL,
   `data_creazione` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -83,8 +85,8 @@ CREATE TABLE `medici` (
 -- Dump dei dati per la tabella `medici`
 --
 
-INSERT INTO `medici` (`id`, `username`, `password`, `nome`, `cognome`, `email`, `data_creazione`) VALUES
-(3, 'Vitrio', '$2y$10$edWjpIjfPUaepM8LzQZqbuDvGChBcIxXs.4p0OhRc2xeV6Vn8BVpS', 'Antonio', 'Troiani', 'info.antoniotroiani@gmail.com', '2025-01-10 09:18:58');
+INSERT INTO `medici` (`id`, `username`, `password`, `nome`, `cognome`, `email`, `specializzazione`, `data_creazione`) VALUES
+(3, 'Vitrio', '$2y$10$edWjpIjfPUaepM8LzQZqbuDvGChBcIxXs.4p0OhRc2xeV6Vn8BVpS', 'Steven', 'Arex', 'info.antoniotroiani@gmail.com', 'Neurologia - Cardiologia (Chirurgia)', '2025-01-10 09:18:58');
 
 -- --------------------------------------------------------
 
@@ -104,13 +106,6 @@ CREATE TABLE `pazienti` (
   `data_creazione` timestamp NOT NULL DEFAULT current_timestamp(),
   `file_allegato` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dump dei dati per la tabella `pazienti`
---
-
-INSERT INTO `pazienti` (`id`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `telefono`, `email`, `note`, `data_creazione`, `file_allegato`) VALUES
-(8, 'Antonio', 'Troiani', '2009-02-12', 'Via Umbria, 220', '3882441366', 'info.antoniotroiani@gmail.com', 'w', '2025-01-11 00:59:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -207,7 +202,7 @@ ALTER TABLE `accessi`
 -- AUTO_INCREMENT per la tabella `appuntamenti`
 --
 ALTER TABLE `appuntamenti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT per la tabella `file`
@@ -219,13 +214,13 @@ ALTER TABLE `file`
 -- AUTO_INCREMENT per la tabella `medici`
 --
 ALTER TABLE `medici`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT per la tabella `pazienti`
 --
 ALTER TABLE `pazienti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT per la tabella `pazienti_file`

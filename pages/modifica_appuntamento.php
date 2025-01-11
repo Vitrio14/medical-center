@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data_appuntamento = $_POST['data_appuntamento'];
     $ora_appuntamento = $_POST['ora_appuntamento'];
     $note = $_POST['note'];
+    $stato = $_POST['stato'];
 
     // Verifica che i campi obbligatori siano compilati
     if (empty($data_appuntamento) || empty($ora_appuntamento)) {
@@ -43,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Aggiorna i dati dell'appuntamento
         $sql_update = "UPDATE appuntamenti 
-                       SET data_appuntamento = ?, ora_appuntamento = ?, note = ? 
+                       SET data_appuntamento = ?, ora_appuntamento = ?, note = ?, stato = ? 
                        WHERE id = ?";
         $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param('sssi', $data_appuntamento, $ora_appuntamento, $note, $id);
+        $stmt_update->bind_param('ssssi', $data_appuntamento, $ora_appuntamento, $note, $stato, $id);
 
         if ($stmt_update->execute()) {
             echo "<div class='alert alert-success'>Appuntamento aggiornato con successo.</div>";
@@ -90,6 +91,16 @@ $conn->close();
             <div class="mb-3">
                 <label for="note" class="form-label">Note</label>
                 <textarea class="form-control" id="note" name="note" rows="3"><?php echo htmlspecialchars($appuntamento['note']); ?></textarea>
+            </div>
+
+            <!-- Stato -->
+            <div class="mb-3">
+                <label for="stato" class="form-label">Stato</label>
+                <select class="form-select" id="stato" name="stato">
+                    <option value="Non confermato" <?php echo ($appuntamento['stato'] === 'Non confermato') ? 'selected' : ''; ?>>Non confermato</option>
+                    <option value="Confermato" <?php echo ($appuntamento['stato'] === 'Confermato') ? 'selected' : ''; ?>>Confermato</option>
+                    <option value="Annullato" <?php echo ($appuntamento['stato'] === 'Annullato') ? 'selected' : ''; ?>>Annullato</option>
+                </select>
             </div>
 
             <!-- Pulsante per salvare -->

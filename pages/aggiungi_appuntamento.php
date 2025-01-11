@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Esegui la query
     if ($stmt->execute()) {
         // Redirezione in caso di successo
-        header('Location: gestione_appuntamenti.php?success=1');
+        header('Location: aggiungi_appuntamento.php?success=1');
         exit();
     } else {
         // Mostra un messaggio di errore in caso di fallimento
@@ -72,6 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="container mt-5">
     <h2>Aggiungi Nuovo Appuntamento</h2>
+
+    <!-- Messaggio di conferma -->
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+        <div class="alert alert-success">
+            Appuntamento creato con successo!
+        </div>
+    <?php endif; ?>
+
     <form method="POST" action="aggiungi_appuntamento.php">
         <!-- Selezione Paziente -->
         <div class="mb-3">

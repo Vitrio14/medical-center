@@ -11,15 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];
     $cognome = $_POST['cognome'];
     $email = $_POST['email'];
+    $specializzazione = $_POST['specializzazione']; // Nuovo campo per la specializzazione
 
     $conn = getDBConnection();
-    $sql = "INSERT INTO medici (username, password, nome, cognome, email) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO medici (username, password, nome, cognome, email, specializzazione) 
+            VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('sssss', $username, $password, $nome, $cognome, $email);
+    $stmt->bind_param('ssssss', $username, $password, $nome, $cognome, $email, $specializzazione);
     if ($stmt->execute()) {
         echo "<div class='alert alert-success' role='alert'>Registrazione completata con successo!</div>";
     } else {
-        echo "<div class='alert alert-danger' role='alert'>Errore durante la registrazione.</div>";
+        echo "<div class='alert alert-danger' role='alert'>Errore durante la registrazione: " . $stmt->error . "</div>";
     }
 }
 ?>
@@ -55,6 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="specializzazione" class="form-label">Specializzazione:</label>
+                <input type="text" name="specializzazione" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Registrati</button>
         </form>
