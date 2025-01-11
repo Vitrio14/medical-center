@@ -1,4 +1,7 @@
 <?php
+session_start();
+include('../templates/header.php'); // Inclusione della barra di navigazione
+
 include_once('../includes/db_connect.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -56,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <!-- Aggiungi il link al CDN di Bootstrap JS per eventuali funzionalità interattive -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include('../templates/footer.php'); // Inclusione del footer ?>
 </body>
 </html>

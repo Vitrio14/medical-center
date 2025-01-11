@@ -1,19 +1,25 @@
 <?php
-include_once('../includes/db_connect.php');
-include_once('../includes/session.php');
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
 
-if (isset($_GET['id'])) {
+include_once('../includes/db_connect.php');
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    
+
     $conn = getDBConnection();
     $sql = "DELETE FROM pazienti WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
-    
+
     if ($stmt->execute()) {
-        echo "Paziente eliminato con successo!";
+        header('Location: visualizza_pazienti.php');
+        exit();
     } else {
-        echo "Errore nell'eliminare il paziente.";
+        echo "Errore durante l'eliminazione del paziente.";
     }
 }
 ?>
