@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include_once('../includes/db_connect.php'); // Connessione al database
+include('navbar.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];

@@ -3,6 +3,7 @@ session_start();
 include('../templates/header.php'); // Inclusione della barra di navigazione
 
 include_once('../includes/db_connect.php');
+include('navbar.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];

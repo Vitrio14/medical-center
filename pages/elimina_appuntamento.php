@@ -1,34 +1,44 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
+// Include file di connessione al database
+include_once('../includes/db_connect.php');
 
-include('../includes/db_connect.php');
+// Controlla se l'ID è stato passato tramite GET
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']); // Converte l'ID in un numero intero per sicurezza
 
-// Verifica se l'ID dell'appuntamento è stato passato
-if (isset($_POST['appuntamento_id'])) {
-    $appuntamento_id = $_POST['appuntamento_id'];
-
-    // Connetti al database
+    // Connessione al database
     $conn = getDBConnection();
 
-    // Prepara la query di eliminazione
+    // Query per eliminare l'appuntamento
     $sql = "DELETE FROM appuntamenti WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $appuntamento_id);
 
-    // Esegui la query
-    if ($stmt->execute()) {
-        // Redirigi alla pagina di gestione appuntamenti con un messaggio di successo
-        header('Location: gestione_appuntamenti.php?success=1');
-        exit();
+    if ($stmt) {
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        // Verifica se l'appuntamento è stato eliminato
+        if ($stmt->affected_rows > 0) {
+            echo "<script>
+                alert('Appuntamento eliminato con successo!');
+                window.location.href = 'gestione_appuntamenti.php';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Errore: ID appuntamento non trovato!');
+                window.location.href = 'gestione_appuntamenti.php';
+            </script>";
+        }
     } else {
-        // Se si verifica un errore, mostra un messaggio
-        echo "<div class='alert alert-danger'>Errore nell'eliminazione dell'appuntamento.</div>";
+        echo "<script>
+            alert('Errore nella preparazione della query: " . htmlspecialchars($conn->error) . "');
+            window.location.href = 'gestione_appuntamenti.php';
+        </script>";
     }
 } else {
-    echo "<div class='alert alert-warning'>ID appuntamento non trovato.</div>";
+    echo "<script>
+        alert('Errore: ID appuntamento non fornito!');
+        window.location.href = 'gestione_appuntamenti.php';
+    </script>";
 }
 ?>

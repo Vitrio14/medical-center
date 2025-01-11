@@ -3,16 +3,17 @@ session_start();
 
 // Controllo se l'utente è loggato
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login.php'); // Reindirizza alla pagina di login se non loggato
     exit();
 }
 
+// Inclusione del file per la connessione al database
+include_once('../includes/db_connect.php');
 include('../templates/header.php');
-include_once('../includes/db_connect.php'); // Inclusione del file per la connessione al database
+include('navbar.php');
 
 // Recupera l'elenco dei pazienti dal database
 $conn = getDBConnection();
-
 $sql_pazienti = "SELECT id, CONCAT(nome, ' ', cognome) AS nome_completo FROM pazienti";
 $result_pazienti = $conn->query($sql_pazienti);
 $pazienti = $result_pazienti ? $result_pazienti->fetch_all(MYSQLI_ASSOC) : [];
@@ -23,6 +24,50 @@ $result_medici = $conn->query($sql_medici);
 $medici = $result_medici ? $result_medici->fetch_all(MYSQLI_ASSOC) : [];
 
 $conn->close(); // Chiude la connessione al database
+
+// Verifica se il form è stato inviato
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recupero dei dati inviati dal form
+    $paziente_id = $_POST['paziente'];
+    $medico_id = $_POST['medico'];
+    $data_appuntamento = $_POST['data'];
+    $ora_appuntamento = $_POST['ora'];
+    $note = isset($_POST['note']) ? $_POST['note'] : null;
+
+    // Validazione di base
+    if (empty($paziente_id) || empty($medico_id) || empty($data_appuntamento) || empty($ora_appuntamento)) {
+        die("Errore: Tutti i campi obbligatori devono essere compilati.");
+    }
+
+    // Connessione al database
+    $conn = getDBConnection();
+
+    // Query SQL per inserire un nuovo appuntamento
+    $sql = "INSERT INTO appuntamenti (paziente_id, medico_id, data_appuntamento, ora_appuntamento, note, data_creazione) 
+            VALUES (?, ?, ?, ?, ?, NOW())";
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Errore nella preparazione della query: " . $conn->error);
+    }
+
+    // Collegare i parametri alla query
+    $stmt->bind_param("iisss", $paziente_id, $medico_id, $data_appuntamento, $ora_appuntamento, $note);
+
+    // Esegui la query
+    if ($stmt->execute()) {
+        // Redirezione in caso di successo
+        header('Location: gestione_appuntamenti.php?success=1');
+        exit();
+    } else {
+        // Mostra un messaggio di errore in caso di fallimento
+        echo "Errore durante il salvataggio dell'appuntamento: " . $stmt->error;
+    }
+
+    // Chiude lo statement e la connessione
+    $stmt->close();
+    $conn->close();
+}
 ?>
 
 <div class="container mt-5">
