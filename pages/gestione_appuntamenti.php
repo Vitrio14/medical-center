@@ -43,21 +43,21 @@ $conn->close();
     <div class="container mt-5">
         <h2>Gestione Appuntamenti</h2>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Paziente</th>
-                    <th>Medico</th>
-                    <th>Data</th>
-                    <th>Ora</th>
-                    <th>Note</th>
-                    <th>Stato</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($result && $result->num_rows > 0): ?>
+        <?php if ($result && $result->num_rows > 0): ?>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Paziente</th>
+                        <th>Medico</th>
+                        <th>Data</th>
+                        <th>Ora</th>
+                        <th>Note</th>
+                        <th>Stato</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['id']); ?></td>
@@ -78,13 +78,11 @@ $conn->close();
                             </td>
                         </tr>
                     <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="8" class="text-center">Nessun appuntamento trovato.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <div class="alert alert-info text-center">Nessun appuntamento registrato.</div>
+        <?php endif; ?>
 
         <a href="aggiungi_appuntamento.php" class="btn btn-success">Aggiungi Nuovo Appuntamento</a>
     </div>

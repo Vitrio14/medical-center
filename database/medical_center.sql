@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 11, 2025 alle 15:01
+-- Creato il: Gen 11, 2025 alle 20:24
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -107,6 +107,13 @@ CREATE TABLE `pazienti` (
   `file_allegato` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `pazienti`
+--
+
+INSERT INTO `pazienti` (`id`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `telefono`, `email`, `note`, `data_creazione`, `file_allegato`) VALUES
+(20, 'Roberto', 'Rossi', '1980-06-14', 'Los Santos', '(800) 533-345', 'yetiro8795@datingel.com', 'Paziente cardiopatico in trattamento.', '2025-01-11 19:23:41', '226_1471996198_dj.png');
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +126,13 @@ CREATE TABLE `pazienti_file` (
   `nome_file` varchar(255) NOT NULL,
   `data_caricamento` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `pazienti_file`
+--
+
+INSERT INTO `pazienti_file` (`id`, `paziente_id`, `nome_file`, `data_caricamento`) VALUES
+(4, 20, '226_1471996198_dj.png', '2025-01-11 20:23:51');
 
 -- --------------------------------------------------------
 
@@ -202,7 +216,7 @@ ALTER TABLE `accessi`
 -- AUTO_INCREMENT per la tabella `appuntamenti`
 --
 ALTER TABLE `appuntamenti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT per la tabella `file`
@@ -220,13 +234,13 @@ ALTER TABLE `medici`
 -- AUTO_INCREMENT per la tabella `pazienti`
 --
 ALTER TABLE `pazienti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT per la tabella `pazienti_file`
 --
 ALTER TABLE `pazienti_file`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la tabella `utenti`

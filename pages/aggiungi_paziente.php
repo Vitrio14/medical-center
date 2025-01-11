@@ -10,6 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 include_once('../includes/db_connect.php'); // Connessione al database
 include('navbar.php');
 
+$success = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];
     $cognome = $_POST['cognome'];
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param('ssssssss', $nome, $cognome, $data_nascita, $indirizzo, $telefono, $email, $note, $file_allegato);
 
     if ($stmt->execute()) {
-        $success = "Paziente aggiunto con successo!";
+        $success = true;
     } else {
         $error = "Errore durante l'aggiunta del paziente.";
     }
@@ -55,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Aggiungi Paziente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <?php include('../templates/header.php'); ?>
@@ -62,9 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container mt-5">
         <h2>Aggiungi Nuovo Paziente</h2>
 
-        <?php if (isset($success)): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
-        <?php elseif (isset($error)): ?>
+        <?php if (isset($error)): ?>
             <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>
 
@@ -105,6 +106,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal per notifica -->
+    <?php if ($success): ?>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Paziente Aggiunto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Il paziente è stato aggiunto con successo! Cosa desideri fare?
+                </div>
+                <div class="modal-footer">
+                    <a href="visualizza_pazienti.php" class="btn btn-primary">Visualizza Pazienti</a>
+                    <a href="dashboard.php" class="btn btn-secondary">Torna alla Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Mostra il modal automaticamente al caricamento della pagina
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    </script>
+    <?php endif; ?>
+
 </body>
 </html>

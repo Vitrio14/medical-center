@@ -54,8 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param('sssssssi', $nome, $cognome, $data_nascita, $indirizzo, $telefono, $email, $note, $id);
 
     if ($stmt->execute()) {
-        $success = "Paziente aggiornato con successo.";
-
         // Gestione dei file caricati
         if (!empty($_FILES['files']['name'][0])) {
             $upload_dir = '../uploads/';
@@ -89,6 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
+
+        // Reindirizzamento con parametro di successo
+        header('Location: visualizza_pazienti.php?success=modifica');
+        exit();
     } else {
         $error = "Errore durante l'aggiornamento del paziente.";
     }
