@@ -31,6 +31,9 @@ if (!$medico) {
     die("Errore: Medico non trovato.");
 }
 
+$message = ''; // Variabile per il messaggio del modal
+$messageType = ''; // Tipo di messaggio ('success' o 'danger')
+
 // Se il modulo è stato inviato, aggiorna i dettagli del medico
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
@@ -40,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Verifica che i campi obbligatori siano compilati
     if (empty($nome) || empty($cognome) || empty($email)) {
-        echo "<div class='alert alert-danger'>Errore: Tutti i campi obbligatori devono essere compilati.</div>";
+        $message = "Errore: Tutti i campi obbligatori devono essere compilati.";
+        $messageType = 'danger';
     } else {
         // Aggiorna i dati del medico
         $sql_update = "UPDATE medici 
@@ -50,9 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->bind_param('ssssi', $nome, $cognome, $email, $specializzazione, $id);
 
         if ($stmt_update->execute()) {
-            echo "<div class='alert alert-success'>Dettagli del medico aggiornati con successo.</div>";
+            $message = "Dettagli del medico aggiornati con successo.";
+            $messageType = 'success';
         } else {
-            echo "<div class='alert alert-danger'>Errore nell'aggiornamento del medico.</div>";
+            $message = "Errore nell'aggiornamento del medico.";
+            $messageType = 'danger';
         }
     }
 }
@@ -107,6 +113,37 @@ $conn->close();
         </form>
     </div>
 
+    <!-- Modal -->
+    <?php if (!empty($message)): ?>
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultModalLabel">
+                        <?php echo $messageType === 'success' ? 'Successo' : 'Errore'; ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+                <div class="modal-footer">
+                    <a href="dashboard.php" class="btn btn-primary">Vai alla Dashboard</a>
+                    <a href="visualizza_medici.php" class="btn btn-secondary">Visualizza Medici</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (!empty($message)): ?>
+                var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                resultModal.show();
+            <?php endif; ?>
+        });
+    </script>
 </body>
 </html>

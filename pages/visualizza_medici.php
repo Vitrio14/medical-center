@@ -75,11 +75,12 @@ $conn->close();
                                 <!-- Pulsante per modificare -->
                                 <a href="modifica_medico.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Modifica</a>
                                 
-                                <!-- Pulsante per eliminare -->
-                                <form action="elimina_medico.php" method="POST" class="d-inline">
-                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo medico?');">Elimina</button>
-                                </form>
+    <!-- Pulsante per eliminare -->
+<form action="elimina_medico.php" method="POST" class="d-inline">
+    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo medico?');">Elimina</button>
+</form>
+
                             </td>
                         </tr>
                     <?php endwhile; ?>

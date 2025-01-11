@@ -5,6 +5,9 @@ include('../templates/header.php'); // Inclusione della barra di navigazione
 include_once('../includes/db_connect.php');
 include('navbar.php');
 
+$message = ''; // Variabile per il messaggio del modal
+$messageType = ''; // Tipo di messaggio ('success' o 'danger')
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -18,10 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ssssss', $username, $password, $nome, $cognome, $email, $specializzazione);
+
     if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>Registrazione completata con successo!</div>";
+        $message = 'Registrazione completata con successo!';
+        $messageType = 'success';
     } else {
-        echo "<div class='alert alert-danger' role='alert'>Errore durante la registrazione: " . $stmt->error . "</div>";
+        $message = 'Errore durante la registrazione: ' . $stmt->error;
+        $messageType = 'danger';
     }
 }
 ?>
@@ -65,6 +71,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" class="btn btn-primary">Registrati</button>
         </form>
     </div>
+
+    <!-- Modal -->
+    <?php if (!empty($message)): ?>
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultModalLabel">
+                        <?php echo $messageType === 'success' ? 'Successo' : 'Errore'; ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+                <div class="modal-footer">
+                    <a href="dashboard.php" class="btn btn-primary">Vai alla Dashboard</a>
+                    <a href="visualizza_medici.php" class="btn btn-secondary">Visualizza Medici</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (!empty($message)): ?>
+                var resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+                resultModal.show();
+            <?php endif; ?>
+        });
+    </script>
 
     <?php include('../templates/footer.php'); // Inclusione del footer ?>
 </body>

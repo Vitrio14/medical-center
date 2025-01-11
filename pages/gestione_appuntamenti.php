@@ -38,8 +38,6 @@ $conn->close();
     <title>Gestione Appuntamenti</title>
 </head>
 <body>
-
-    <!-- Contenuto Principale -->
     <div class="container mt-5">
         <h2>Gestione Appuntamenti</h2>
 
@@ -72,9 +70,13 @@ $conn->close();
                                 <a href="modifica_appuntamento.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Modifica</a>
                                 
                                 <!-- Pulsante per eliminare -->
-                                <a href="elimina_appuntamento.php?id=<?php echo $row['id']; ?>" 
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Sei sicuro di voler eliminare questo appuntamento?');">Elimina</a>
+                                <button 
+                                    class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal" 
+                                    data-id="<?php echo $row['id']; ?>">
+                                    Elimina
+                                </button>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -87,6 +89,38 @@ $conn->close();
         <a href="aggiungi_appuntamento.php" class="btn btn-success">Aggiungi Nuovo Appuntamento</a>
     </div>
 
+    <!-- Modal per conferma eliminazione -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Conferma Eliminazione</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sei sicuro di voler eliminare questo appuntamento?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Conferma</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteModal = document.getElementById('deleteModal');
+            var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+            // Assegna l'ID al pulsante "Conferma" quando si apre il modal
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; // Pulsante che ha attivato il modal
+                var appointmentId = button.getAttribute('data-id'); // ID dell'appuntamento
+                confirmDeleteBtn.href = "elimina_appuntamento.php?id=" + appointmentId;
+            });
+        });
+    </script>
 </body>
 </html>

@@ -49,8 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param('ssssi', $data_appuntamento, $ora_appuntamento, $note, $stato, $id);
 
-        if ($stmt_update->execute()) {
-            echo "<div class='alert alert-success'>Appuntamento aggiornato con successo.</div>";
+        if ($stmt_update->execute() && $stmt_update->affected_rows > 0) {
+            // Reindirizza con il parametro success=1
+            header('Location: modifica_appuntamento.php?id=' . $id . '&success=1');
+            exit();
         } else {
             echo "<div class='alert alert-danger'>Errore nell'aggiornamento dell'appuntamento.</div>";
         }
@@ -108,6 +110,36 @@ $conn->close();
             <a href="gestione_appuntamenti.php" class="btn btn-secondary">Annulla</a>
         </form>
     </div>
+
+    <!-- Modal per notifica -->
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Appuntamento Aggiornato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    L'appuntamento è stato aggiornato con successo! Cosa desideri fare?
+                </div>
+                <div class="modal-footer">
+                    <a href="dashboard.php" class="btn btn-primary">Vai alla Dashboard</a>
+                    <a href="gestione_appuntamenti.php" class="btn btn-secondary">Visualizza Appuntamenti</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var successModalElement = document.getElementById('successModal');
+            if (successModalElement) {
+                var successModal = new bootstrap.Modal(successModalElement);
+                successModal.show();
+            }
+        });
+    </script>
+    <?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

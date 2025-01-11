@@ -50,7 +50,7 @@ $total_medici = ($result_medici->num_rows > 0) ? $result_medici->fetch_assoc()['
 ?>
 
 <div class="container mt-5">
-    <h1>Benvenuto nel Medical Center!</h1>
+    <h1>Benvenuto nel gestionale EMS, dottore!</h1>
     <p>Questa è la tua dashboard. Puoi navigare tra le funzionalità usando il menu in alto.</p>
     
     <div class="row">

@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <!-- Logo e Titolo -->
         <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-            <span>Medical Center</span>
+            <span>Gestionale EMS</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

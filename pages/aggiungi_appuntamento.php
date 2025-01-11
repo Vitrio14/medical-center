@@ -75,10 +75,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Messaggio di conferma -->
     <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-        <div class="alert alert-success">
-            Appuntamento creato con successo!
+    <!-- Modal per notifica -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Appuntamento Aggiunto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    L'appuntamento è stato registrato con successo! Cosa desideri fare?
+                </div>
+                <div class="modal-footer">
+                    <a href="dashboard.php" class="btn btn-primary">Vai alla Dashboard</a>
+                    <a href="gestione_appuntamenti.php" class="btn btn-secondary">Visualizza Appuntamenti</a>
+                </div>
+            </div>
         </div>
-    <?php endif; ?>
+    </div>
+    <script>
+        // Mostra il modal automaticamente al caricamento della pagina
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    </script>
+<?php endif; ?>
+
 
     <form method="POST" action="aggiungi_appuntamento.php">
         <!-- Selezione Paziente -->
