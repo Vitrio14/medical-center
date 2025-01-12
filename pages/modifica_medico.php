@@ -11,13 +11,20 @@ if (!isset($_SESSION['user_id'])) {
 
 // Verifica se è stato fornito un ID medico
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die("Errore: ID medico non specificato.");
+    $_SESSION['error_message'] = "ID medico non specificato.";
+    header('Location: visualizza_medici.php');
+    exit();
 }
 
 $id = intval($_GET['id']);
 
 // Connessione al database
 $conn = getDBConnection();
+if (!$conn) {
+    $_SESSION['error_message'] = "Errore di connessione al database.";
+    header('Location: visualizza_medici.php');
+    exit();
+}
 
 // Recupera i dettagli del medico
 $sql = "SELECT * FROM medici WHERE id = ?";
@@ -28,22 +35,27 @@ $result = $stmt->get_result();
 $medico = $result->fetch_assoc();
 
 if (!$medico) {
-    die("Errore: Medico non trovato.");
+    $_SESSION['error_message'] = "Medico non trovato.";
+    header('Location: visualizza_medici.php');
+    exit();
 }
 
-$message = ''; // Variabile per il messaggio del modal
-$messageType = ''; // Tipo di messaggio ('success' o 'danger')
+$message = ''; // Messaggio di feedback
+$messageType = ''; // Tipo del messaggio (success o danger)
 
 // Se il modulo è stato inviato, aggiorna i dettagli del medico
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = $_POST['nome'];
-    $cognome = $_POST['cognome'];
-    $email = $_POST['email'];
-    $specializzazione = $_POST['specializzazione'];
+    $nome = trim($_POST['nome']);
+    $cognome = trim($_POST['cognome']);
+    $email = trim($_POST['email']);
+    $specializzazione = trim($_POST['specializzazione']);
 
     // Verifica che i campi obbligatori siano compilati
     if (empty($nome) || empty($cognome) || empty($email)) {
         $message = "Errore: Tutti i campi obbligatori devono essere compilati.";
+        $messageType = 'danger';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Errore: Inserisci un'email valida.";
         $messageType = 'danger';
     } else {
         // Aggiorna i dati del medico

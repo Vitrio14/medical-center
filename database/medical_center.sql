@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 12, 2025 alle 00:38
+-- Creato il: Gen 12, 2025 alle 22:28
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -86,7 +86,7 @@ CREATE TABLE `medici` (
 --
 
 INSERT INTO `medici` (`id`, `username`, `password`, `nome`, `cognome`, `email`, `specializzazione`, `data_creazione`) VALUES
-(9, 'Vitrio', '$2y$10$nLCXgw8wN0sP3JVgfqcELu8UbDKkVhJNEyQ9pNR5jDfPgEGTSabRu', 'Steven', 'Arex', 'info.antoniotroiani@gmail.com', 'Neurologia - Cardiologia (Chirurgia)', '2025-01-11 22:46:31');
+(26, 'P01_arex', '$2y$10$pr45ZezhlKJR5QCpFHvgee091hEIBwfr7COVW1OeV62KRX8xaGV5a', 'Steven', 'Arex', 'stevenarex@impero.it', 'Neurologia - Cardiologia (Chirurgia)', '2025-01-12 21:27:49');
 
 -- --------------------------------------------------------
 
@@ -107,13 +107,6 @@ CREATE TABLE `pazienti` (
   `file_allegato` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dump dei dati per la tabella `pazienti`
---
-
-INSERT INTO `pazienti` (`id`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `telefono`, `email`, `note`, `data_creazione`, `file_allegato`) VALUES
-(21, 'Roberto', 'Rossi', '1980-06-14', 'Los Santos', '800', 're.feel2024@gmail.com', 'ciao', '2025-01-11 22:23:38', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -125,6 +118,24 @@ CREATE TABLE `pazienti_file` (
   `paziente_id` int(11) NOT NULL,
   `nome_file` varchar(255) NOT NULL,
   `data_caricamento` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `pronto_soccorso`
+--
+
+CREATE TABLE `pronto_soccorso` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `cognome` varchar(100) NOT NULL,
+  `data_nascita` date NOT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
+  `codice_colore` enum('rosso','giallo','verde','bianco') NOT NULL,
+  `trattamenti` text NOT NULL,
+  `medico_id` int(11) DEFAULT NULL,
+  `data_trattamento` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -189,6 +200,13 @@ ALTER TABLE `pazienti_file`
   ADD KEY `paziente_id` (`paziente_id`);
 
 --
+-- Indici per le tabelle `pronto_soccorso`
+--
+ALTER TABLE `pronto_soccorso`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `medico_id` (`medico_id`);
+
+--
 -- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
@@ -209,7 +227,7 @@ ALTER TABLE `accessi`
 -- AUTO_INCREMENT per la tabella `appuntamenti`
 --
 ALTER TABLE `appuntamenti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `file`
@@ -221,19 +239,25 @@ ALTER TABLE `file`
 -- AUTO_INCREMENT per la tabella `medici`
 --
 ALTER TABLE `medici`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT per la tabella `pazienti`
 --
 ALTER TABLE `pazienti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT per la tabella `pazienti_file`
 --
 ALTER TABLE `pazienti_file`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `pronto_soccorso`
+--
+ALTER TABLE `pronto_soccorso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `utenti`
@@ -269,6 +293,12 @@ ALTER TABLE `file`
 --
 ALTER TABLE `pazienti_file`
   ADD CONSTRAINT `pazienti_file_ibfk_1` FOREIGN KEY (`paziente_id`) REFERENCES `pazienti` (`id`) ON DELETE CASCADE;
+
+--
+-- Limiti per la tabella `pronto_soccorso`
+--
+ALTER TABLE `pronto_soccorso`
+  ADD CONSTRAINT `pronto_soccorso_ibfk_1` FOREIGN KEY (`medico_id`) REFERENCES `medici` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
